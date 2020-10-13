@@ -1,3 +1,3 @@
 # WhatsApp-Now
 Send WhatsApp messages without saving the contact on your phone.
-![](Demo-gif.gif)
+![](https://github.com/OmerZo/WhatsApp-Now/blob/master/Demo%20gif.gif)
