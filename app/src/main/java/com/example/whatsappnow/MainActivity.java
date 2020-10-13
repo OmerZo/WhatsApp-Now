@@ -8,15 +8,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText mEtPhoneNumber = null;
+    private EditText mEtMessage = null;
+    private Button mBtnSend = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mEtPhoneNumber = (EditText)findViewById(R.id.etPhoneNumber);
+        mEtMessage = (EditText) findViewById(R.id.etMessage);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -37,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 String formattedNumber = PhoneNumberUtils.formatNumber(sharedText, "IL");
-                EditText phoneNumber = (EditText)findViewById(R.id.editText2);
-                phoneNumber.setText(formattedNumber);
+                mEtPhoneNumber.setText(formattedNumber);
             } catch (Exception e) {
                 Toast.makeText(this, "Unsupported text", Toast.LENGTH_SHORT).show();
             }
@@ -49,20 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void formatUrl(View view) {
 
-        EditText phoneNumber = (EditText)findViewById(R.id.editText2);
-        EditText message = (EditText) findViewById(R.id.editText);
-
-        String phone = phoneNumber.getText().toString();
-        String mess = message.getText().toString();
+        String phoneNumber = mEtPhoneNumber.getText().toString();
+        String message = mEtMessage.getText().toString();
 
         try {
-            String formattedNumber = PhoneNumberUtils.formatNumberToE164(phone, "IL");
-            formattedNumber = formattedNumber.substring(1);
-            String url = "https://wa.me/" + formattedNumber + "?text=" + mess;
+            String formattedNumber = PhoneNumberUtils.formatNumberToE164(phoneNumber, "IL");
+            formattedNumber = formattedNumber.substring(1);     //Delete the "+" sign.
+            String url = "https://wa.me/" + formattedNumber + "?text=" + message;
             sendMessage(url);
 
         } catch (Exception e) {
-            Toast.makeText(this, "Unsupported text", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Unsupported Number", Toast.LENGTH_SHORT).show();
+            mEtPhoneNumber.setError("Unsupported Number");
         }
 
     }
